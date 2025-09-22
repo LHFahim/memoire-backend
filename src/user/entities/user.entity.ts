@@ -33,7 +33,7 @@ export class UserEntity extends DocumentWithTimeStamps {
   @IsEmail()
   @IsNotEmpty()
   @Prop({ required: true, trim: true })
-  @ApiProperty({ required: true, default: 'fahim@gmail.com' })
+  @ApiProperty({ required: true, default: 'fahimdev200@gmail.com' })
   email: string;
 
   @Exclude()
