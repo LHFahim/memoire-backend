@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Prop, Ref } from '@typegoose/typegoose';
-import { Expose, Type } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
   IsDateString,
@@ -88,7 +88,7 @@ export class TodoEntity extends DocumentWithTimeStamps {
   @IsString({ each: true })
   @ApiProperty({ required: false, type: [String] })
   @Prop({ required: false, type: [String], default: [] })
-  attachment?: string[];
+  attachments?: string[];
 
   @Expose()
   @IsString()
@@ -107,9 +107,21 @@ export class TodoEntity extends DocumentWithTimeStamps {
 
   @Expose()
   @IsMongoId()
-  @IsNotEmpty()
   @Type(() => UserEntity)
-  @ApiProperty({ required: true, type: UserEntity })
   @Prop({ required: true, ref: () => UserEntity })
+  @ApiProperty({ required: false, type: () => UserEntity })
+  @Transform(({ value }) => value._id.toString(), { toPlainOnly: true })
   createdBy: Ref<UserEntity>;
+
+  @Prop({ required: false, type: Boolean, default: true })
+  @Expose()
+  @IsBoolean()
+  @IsNotEmpty()
+  isActive: boolean;
+
+  @Prop({ required: false, type: Boolean, default: false })
+  @Expose()
+  @IsBoolean()
+  @IsNotEmpty()
+  isDeleted: boolean;
 }

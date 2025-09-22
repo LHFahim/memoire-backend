@@ -25,4 +25,12 @@ export const Routes = {
   [ControllersEnum.Profile]: {
     me: 'me',
   },
+
+  [ControllersEnum.Todo]: {
+    createTodo: '',
+    findAllTodos: '',
+    findOneTodo: ':id',
+    updateOneTodo: ':id',
+    deleteOneTodo: ':id',
+  },
 } as const;

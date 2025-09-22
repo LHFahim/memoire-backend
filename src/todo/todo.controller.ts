@@ -3,18 +3,20 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Serialize } from 'libraries/serializer/serializer.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Routes } from 'src/common/constant/routes';
+import { ResourceId } from 'src/common/decorator/params.decorator';
 import { UserId } from 'src/common/decorator/user.decorator';
 import { APIVersions } from 'src/common/enum/api-versions.enum';
 import { ControllersEnum } from 'src/common/enum/controllers.enum';
-import { CreateTodoDto, UpdateTodoDto } from './dto/todo.dto';
+import { CreateTodoDto, TodoQueryDto, UpdateTodoDto } from './dto/todo.dto';
 import { TodoService } from './todo.service';
 
 @ApiTags('Todo')
@@ -25,28 +27,32 @@ import { TodoService } from './todo.service';
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
-  @Post()
-  create(@UserId() userId: string, @Body() body: CreateTodoDto) {
-    return this.todoService.create(userId, body);
+  @Post(Routes[ControllersEnum.Todo].createTodo)
+  createTodo(@UserId() userId: string, @Body() body: CreateTodoDto) {
+    return this.todoService.createTodo(userId, body);
   }
 
-  @Get()
-  findAll() {
-    return this.todoService.findAll();
+  @Get(Routes[ControllersEnum.Todo].findAllTodos)
+  findAllTodos(@UserId() userId: string, @Query() query: TodoQueryDto) {
+    return this.todoService.findAllTodos(userId, query);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.todoService.findOne(+id);
+  @Get(Routes[ControllersEnum.Todo].findOneTodo)
+  findOneTodo(@UserId() userId: string, @ResourceId() id: string) {
+    return this.todoService.findOneTodo(userId, id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTodoDto: UpdateTodoDto) {
-    return this.todoService.update(+id, updateTodoDto);
+  @Patch(Routes[ControllersEnum.Todo].updateOneTodo)
+  updateOneTodo(
+    @UserId() userId: string,
+    @ResourceId() id: string,
+    @Body() body: UpdateTodoDto,
+  ) {
+    return this.todoService.updateOneTodo(userId, id, body);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.todoService.remove(+id);
+  @Delete(Routes[ControllersEnum.Todo].deleteOneTodo)
+  deleteOneTodo(@UserId() userId: string, @ResourceId() id: string) {
+    return this.todoService.deleteOneTodo(userId, id);
   }
 }
