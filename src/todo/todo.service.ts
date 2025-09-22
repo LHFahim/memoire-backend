@@ -61,8 +61,6 @@ export class TodoService extends SerializeService<TodoEntity> {
       isDeleted: false,
     });
 
-    console.log(todos);
-
     return {
       items: this.toJSONs(todos, TodoDto),
       pagination: {

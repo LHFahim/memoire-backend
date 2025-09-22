@@ -113,10 +113,10 @@ export class TodoEntity extends DocumentWithTimeStamps {
   @Transform(({ value }) => value._id.toString(), { toPlainOnly: true })
   createdBy: Ref<UserEntity>;
 
-  @Prop({ required: false, type: Boolean, default: true })
   @Expose()
   @IsBoolean()
   @IsNotEmpty()
+  @Prop({ required: false, type: Boolean, default: true })
   isActive: boolean;
 
   @Prop({ required: false, type: Boolean, default: false })

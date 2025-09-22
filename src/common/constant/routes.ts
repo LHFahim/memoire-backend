@@ -33,4 +33,12 @@ export const Routes = {
     updateOneTodo: ':id',
     deleteOneTodo: ':id',
   },
+
+  [ControllersEnum.Board]: {
+    createBoard: '',
+    findAllBoards: '',
+    findOneBoard: ':id',
+    updateOneBoard: ':id',
+    deleteOneBoard: ':id',
+  },
 } as const;

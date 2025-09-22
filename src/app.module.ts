@@ -8,6 +8,7 @@ import { ConfigService } from './config/config.service';
 import { ProfileModule } from './profile/profile.module';
 import { UserModule } from './user/user.module';
 import { TodoModule } from './todo/todo.module';
+import { BoardModule } from './board/board.module';
 
 @Module({
   imports: [
@@ -28,6 +29,8 @@ import { TodoModule } from './todo/todo.module';
     ProfileModule,
 
     TodoModule,
+
+    BoardModule,
   ],
   controllers: [],
   providers: [AppService],
