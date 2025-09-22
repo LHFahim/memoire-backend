@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { SerializeService } from 'libraries/serializer/serialize';
 import { InjectModel } from 'nestjs-typegoose';
+import { BoardEntity } from 'src/board/entities/board.entity';
 import {
   CreateTodoDto,
   TodoDto,
@@ -17,11 +18,21 @@ export class TodoService extends SerializeService<TodoEntity> {
   constructor(
     @InjectModel(TodoEntity)
     private readonly todoModel: ReturnModelType<typeof TodoEntity>,
+    @InjectModel(BoardEntity)
+    private readonly boardModel: ReturnModelType<typeof BoardEntity>,
   ) {
     super(TodoEntity);
   }
 
   async createTodo(userId: string, body: CreateTodoDto) {
+    const boardExists = await this.boardModel.findOne({
+      _id: body.board,
+      createdBy: userId,
+      isDeleted: false,
+    });
+
+    if (!boardExists) throw new NotFoundException('Board not found');
+
     const todoDoc = await this.todoModel.create({
       ...body,
       status: TodoStatusEnum.PENDING,

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Prop, Ref } from '@typegoose/typegoose';
-import { Expose, Transform, Type } from 'class-transformer';
+import { Prop } from '@typegoose/typegoose';
+import { Expose, Type } from 'class-transformer';
 import {
   IsBoolean,
   IsEnum,
@@ -10,8 +10,8 @@ import {
   IsString,
 } from 'class-validator';
 import { Model } from 'libraries/mongodb/modelOptions';
+import { Types } from 'mongoose';
 import { DocumentWithTimeStamps } from 'src/common/classes/documentWithTimeStamps';
-import { UserEntity } from 'src/user/entities/user.entity';
 import { BoardVisibilityEnum } from './board.enums';
 
 export class BoardSettingsEntity {
@@ -85,9 +85,8 @@ export class BoardEntity extends DocumentWithTimeStamps {
 
   @Expose()
   @IsMongoId()
-  @Type(() => UserEntity)
-  @Prop({ required: true, ref: () => UserEntity })
-  @ApiProperty({ required: false, type: () => UserEntity })
-  @Transform(({ value }) => value._id.toString(), { toPlainOnly: true })
-  createdBy: Ref<UserEntity>;
+  @Type(() => String)
+  @Prop({ required: true, ref: 'users' })
+  @ApiProperty({ required: true, type: String })
+  createdBy: Types.ObjectId;
 }

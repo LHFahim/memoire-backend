@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Prop, Ref } from '@typegoose/typegoose';
-import { Expose, Transform, Type } from 'class-transformer';
+import { Prop } from '@typegoose/typegoose';
+import { Expose, Type } from 'class-transformer';
 import {
   IsBoolean,
   IsDateString,
@@ -13,8 +13,8 @@ import {
 } from 'class-validator';
 import { Model } from 'libraries/mongodb/modelOptions';
 
+import { Types } from 'mongoose';
 import { DocumentWithTimeStamps } from 'src/common/classes/documentWithTimeStamps';
-import { UserEntity } from 'src/user/entities/user.entity';
 import { PriorityEnum, TodoStatusEnum, TodoTypeEnum } from './todo.enum';
 
 @Model('todos', true)
@@ -107,11 +107,17 @@ export class TodoEntity extends DocumentWithTimeStamps {
 
   @Expose()
   @IsMongoId()
-  @Type(() => UserEntity)
-  @Prop({ required: true, ref: () => UserEntity })
-  @ApiProperty({ required: false, type: () => UserEntity })
-  @Transform(({ value }) => value._id.toString(), { toPlainOnly: true })
-  createdBy: Ref<UserEntity>;
+  @Type(() => String)
+  @Prop({ required: true, ref: 'boards' })
+  @ApiProperty({ required: true, type: String })
+  board: Types.ObjectId;
+
+  @Expose()
+  @IsMongoId()
+  @Type(() => String)
+  @Prop({ required: true, ref: 'users' })
+  @ApiProperty({ required: true, type: String })
+  createdBy: Types.ObjectId;
 
   @Expose()
   @IsBoolean()
