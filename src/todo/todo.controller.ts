@@ -38,21 +38,30 @@ export class TodoController {
   }
 
   @Get(Routes[ControllersEnum.Todo].findOneTodo)
-  findOneTodo(@UserId() userId: string, @ResourceId() id: string) {
-    return this.todoService.findOneTodo(userId, id);
+  findOneTodo(
+    @UserId() userId: string,
+    @ResourceId('boardId') boardId: string,
+    @ResourceId('id') id: string,
+  ) {
+    return this.todoService.findOneTodo(userId, boardId, id);
   }
 
   @Patch(Routes[ControllersEnum.Todo].updateOneTodo)
   updateOneTodo(
     @UserId() userId: string,
-    @ResourceId() id: string,
+    @ResourceId('boardId') boardId: string,
+    @ResourceId('id') id: string,
     @Body() body: UpdateTodoDto,
   ) {
-    return this.todoService.updateOneTodo(userId, id, body);
+    return this.todoService.updateOneTodo(userId, boardId, id, body);
   }
 
   @Delete(Routes[ControllersEnum.Todo].deleteOneTodo)
-  deleteOneTodo(@UserId() userId: string, @ResourceId() id: string) {
-    return this.todoService.deleteOneTodo(userId, id);
+  deleteOneTodo(
+    @UserId() userId: string,
+    @ResourceId('boardId') boardId: string,
+    @ResourceId('id') id: string,
+  ) {
+    return this.todoService.deleteOneTodo(userId, boardId, id);
   }
 }

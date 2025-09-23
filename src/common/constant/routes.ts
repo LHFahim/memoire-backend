@@ -29,9 +29,9 @@ export const Routes = {
   [ControllersEnum.Todo]: {
     createTodo: '',
     findAllTodos: '',
-    findOneTodo: ':id',
-    updateOneTodo: ':id',
-    deleteOneTodo: ':id',
+    findOneTodo: ':boardId/:id',
+    updateOneTodo: ':boardId/:id',
+    deleteOneTodo: ':boardId/:id',
   },
 
   [ControllersEnum.Board]: {

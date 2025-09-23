@@ -30,7 +30,13 @@ export class TodoDto extends OmitType(TodoEntity, []) {
   createdBy: Types.ObjectId;
 }
 
-export class TodoQueryDto extends PaginationQueryDto {}
+export class TodoQueryDto extends PaginationQueryDto {
+  @IsString()
+  @IsMongoId()
+  @IsNotEmpty()
+  @ApiProperty({ type: String, required: true })
+  boardId: string;
+}
 
 export class TodoPaginatedDto {
   @Expose()

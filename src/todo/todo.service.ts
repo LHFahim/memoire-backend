@@ -62,7 +62,7 @@ export class TodoService extends SerializeService<TodoEntity> {
     query: TodoQueryDto,
   ): Promise<TodoPaginatedDto> {
     const todos = await this.todoModel
-      .find({ createdBy: userId, isDeleted: false })
+      .find({ createdBy: userId, isDeleted: false, board: query.boardId })
       .sort({ [query.sortBy]: query.sort })
       .limit(query.pageSize)
       .skip((query.page - 1) * query.pageSize);
@@ -86,11 +86,12 @@ export class TodoService extends SerializeService<TodoEntity> {
     };
   }
 
-  async findOneTodo(userId: string, id: string) {
+  async findOneTodo(userId: string, boardId: string, id: string) {
     const todo = await this.todoModel.findOne({
       _id: id,
       createdBy: userId,
       isDeleted: false,
+      board: boardId,
     });
 
     if (!todo) throw new NotFoundException('Todo not found');
@@ -98,9 +99,14 @@ export class TodoService extends SerializeService<TodoEntity> {
     return this.toJSON(todo, TodoDto);
   }
 
-  async updateOneTodo(userId: string, id: string, body: UpdateTodoDto) {
+  async updateOneTodo(
+    userId: string,
+    boardId: string,
+    id: string,
+    body: UpdateTodoDto,
+  ) {
     const todo = await this.todoModel.findOneAndUpdate(
-      { _id: id, createdBy: userId, isDeleted: false },
+      { _id: id, createdBy: userId, isDeleted: false, board: boardId },
       { ...body },
       { new: true },
     );
@@ -110,12 +116,13 @@ export class TodoService extends SerializeService<TodoEntity> {
     return this.toJSON(todo, TodoDto);
   }
 
-  async deleteOneTodo(userId: string, id: string) {
+  async deleteOneTodo(userId: string, boardId: string, id: string) {
     const doc = await this.todoModel.findOneAndUpdate(
       {
         _id: id,
         createdBy: userId,
         isDeleted: false,
+        board: boardId,
       },
       { isDeleted: true },
       { new: true },
