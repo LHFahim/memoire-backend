@@ -41,4 +41,12 @@ export const Routes = {
     updateOneBoard: ':id',
     deleteOneBoard: ':id',
   },
+
+  [ControllersEnum.Reflection]: {
+    createReflection: '',
+    findAllReflections: '',
+    findOneReflection: ':boardId/:id',
+    updateOneReflection: ':boardId/:id',
+    deleteOneReflection: ':boardId/:id',
+  },
 } as const;

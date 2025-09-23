@@ -7,4 +7,5 @@ export enum ControllersEnum {
 
   Todo = 'todos',
   Board = 'boards',
+  Reflection = 'reflections',
 }

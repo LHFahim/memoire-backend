@@ -9,6 +9,7 @@ import { ProfileModule } from './profile/profile.module';
 import { UserModule } from './user/user.module';
 import { TodoModule } from './todo/todo.module';
 import { BoardModule } from './board/board.module';
+import { ReflectionModule } from './reflection/reflection.module';
 
 @Module({
   imports: [
@@ -31,6 +32,8 @@ import { BoardModule } from './board/board.module';
     TodoModule,
 
     BoardModule,
+
+    ReflectionModule,
   ],
   controllers: [],
   providers: [AppService],
