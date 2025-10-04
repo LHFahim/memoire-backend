@@ -34,7 +34,9 @@ export class AuthService extends SerializeService<UserEntity> {
   async login(body: LoginDto, request: any) {
     const user = await this.userService.findUserByEmail(request.user.email);
 
-    return this.getAuthResponse(user);
+    const res = await this.getAuthResponse(user);
+
+    return await this.getAuthResponse(user);
   }
 
   async registerByEmail(body: RegisterByEmailDto): Promise<AuthResponseDto> {
