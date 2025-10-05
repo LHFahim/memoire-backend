@@ -34,6 +34,13 @@ export class ReflectionEntity extends DocumentWithTimeStamps {
   content: string;
 
   @Expose()
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ required: true })
+  @Prop({ required: true, trim: true })
+  image_url?: string;
+
+  @Expose()
   @IsMongoId()
   @Type(() => String)
   @Prop({ required: true, ref: 'boards' })

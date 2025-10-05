@@ -28,6 +28,10 @@ export class ReflectionService extends SerializeService<ReflectionEntity> {
     super(ReflectionEntity);
   }
 
+  async onModuleInit() {
+    console.log('ReflectionService initialized');
+  }
+
   async createReflection(userId: string, body: CreateReflectionDto) {
     const boardExists = await this.boardModel.findOne({
       _id: body.board,

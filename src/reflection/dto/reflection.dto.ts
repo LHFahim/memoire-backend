@@ -9,6 +9,7 @@ export class CreateReflectionDto extends PickType(ReflectionEntity, [
   'title',
   'content',
   'board',
+  'image_url',
 ]) {}
 
 export class UpdateReflectionDto extends PartialType(CreateReflectionDto) {}
