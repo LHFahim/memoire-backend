@@ -11,7 +11,6 @@ import {
   UpdateTodoDto,
 } from './dto/todo.dto';
 import { TodoEntity } from './entities/todo.entity';
-import { PriorityEnum, TodoStatusEnum } from './entities/todo.enum';
 
 @Injectable()
 export class TodoService extends SerializeService<TodoEntity> {
@@ -35,8 +34,7 @@ export class TodoService extends SerializeService<TodoEntity> {
 
     const todoDoc = await this.todoModel.create({
       ...body,
-      status: TodoStatusEnum.PENDING,
-      priority: PriorityEnum.LOW,
+
       attachments: [],
       createdBy: userId,
       isActive: true,
@@ -62,7 +60,11 @@ export class TodoService extends SerializeService<TodoEntity> {
     query: TodoQueryDto,
   ): Promise<TodoPaginatedDto> {
     const todos = await this.todoModel
-      .find({ createdBy: userId, isDeleted: false, board: query.boardId })
+      .find({
+        createdBy: userId,
+        isDeleted: false,
+        ...(query.boardId ? { board: query.boardId } : {}),
+      })
       .sort({ [query.sortBy]: query.sort })
       .limit(query.pageSize)
       .skip((query.page - 1) * query.pageSize);

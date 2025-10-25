@@ -1,6 +1,12 @@
 import { ApiProperty, OmitType, PartialType, PickType } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsEnum, IsMongoId, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsEnum,
+  IsMongoId,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { Types } from 'mongoose';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
@@ -10,10 +16,11 @@ import { TodoStatusEnum } from '../entities/todo.enum';
 export class CreateTodoDto extends PickType(TodoEntity, [
   'title',
   'description',
-
+  'status',
   'type',
   'dueDate',
   'color',
+  'priority',
 ]) {
   @IsString()
   @IsNotEmpty()
@@ -38,9 +45,9 @@ export class TodoDto extends OmitType(TodoEntity, []) {
 export class TodoQueryDto extends PaginationQueryDto {
   @IsString()
   @IsMongoId()
-  @IsNotEmpty()
-  @ApiProperty({ type: String, required: true })
-  boardId: string;
+  @IsOptional()
+  @ApiProperty({ type: String, required: false })
+  boardId?: string;
 }
 
 export class TodoPaginatedDto {
