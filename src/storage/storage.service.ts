@@ -1,5 +1,6 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { Inject, Injectable } from '@nestjs/common';
+import { optimizeImage } from 'libraries/image/image';
 import { ConfigService } from 'src/config/config.service';
 import { S3_CLIENT } from './storage.token';
 
@@ -22,14 +23,19 @@ export class StorageService {
     bucket?: string,
     basePrefix?: string,
   ) {
+    const optimizedImage = await optimizeImage(buffer, {
+      format: 'png',
+      width: 1024,
+      height: 1024,
+    });
+
     const key = `${basePrefix}/${userId}_${Date.now()}.png`;
 
-    // Send upload
     const result = await this.s3.send(
       new PutObjectCommand({
         Bucket: bucket,
         Key: key,
-        Body: buffer,
+        Body: optimizedImage,
         ContentType: contentType,
       }),
     );
