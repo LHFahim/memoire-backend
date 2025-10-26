@@ -4,6 +4,7 @@ import { SerializeService } from 'libraries/serializer/serialize';
 import { Types } from 'mongoose';
 import { InjectModel } from 'nestjs-typegoose';
 import { BoardEntity } from 'src/board/entities/board.entity';
+import { StorageService } from 'src/storage/storage.service';
 import {
   CreateReflectionDto,
   ReflectionDto,
@@ -24,6 +25,7 @@ export class ReflectionService extends SerializeService<ReflectionEntity> {
     private readonly reflectionModel: ReturnModelType<typeof ReflectionEntity>,
     @InjectModel(BoardEntity)
     private readonly boardModel: ReturnModelType<typeof BoardEntity>,
+    private readonly storageService: StorageService,
   ) {
     super(ReflectionEntity);
   }
@@ -134,5 +136,24 @@ export class ReflectionService extends SerializeService<ReflectionEntity> {
     if (!doc) throw new NotFoundException('Reflection not found');
 
     return this.toJSON(doc, ReflectionDto);
+  }
+
+  async uploadReflectionImage(userId: string, fileBuffer: Buffer) {
+    // const key = `reflections_${userId}_${Date.now()}.png`;
+    // console.log('🚀 ~ ReflectionService ~ uploadReflectionImage ~ key:', key);
+
+    const result = await this.storageService.uploadBuffer(
+      userId,
+      fileBuffer,
+      'image/png',
+      'memoire-assets',
+      'reflections',
+    );
+    console.log(
+      '🚀 ~ ReflectionService ~ uploadReflectionImage ~ imageUrl:',
+      result,
+    );
+
+    return { message: 'Image uploaded successfully', url: result.url };
   }
 }

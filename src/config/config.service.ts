@@ -15,6 +15,24 @@ class AdminUserCredentials {
   adminUserPass: string;
 }
 
+class AmazonS3 {
+  @Env('S3_ACCESS_KEY')
+  @IsOptional()
+  accessKey: string;
+
+  @Env('S3_SECRET_KEY')
+  @IsOptional()
+  secretKey: string;
+
+  @Env('S3_BUCKET_NAME')
+  @IsOptional()
+  bucketName: string;
+
+  @Env('S3_REGION')
+  @IsOptional()
+  region: string;
+}
+
 @Injectable()
 export class ConfigService {
   @Env('PORT')
@@ -48,6 +66,9 @@ export class ConfigService {
 
   @Section(() => AdminUserCredentials)
   adminUserCredential: AdminUserCredentials;
+
+  @Section(() => AmazonS3)
+  amazonS3: AmazonS3;
 }
 
 export const ParsedConfigs = parseEnv(ConfigService);

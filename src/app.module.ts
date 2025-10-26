@@ -3,13 +3,14 @@ import { TypegooseModule } from 'nestjs-typegoose';
 import { AdminModule } from './admin/admin.module';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { BoardModule } from './board/board.module';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { ProfileModule } from './profile/profile.module';
-import { UserModule } from './user/user.module';
-import { TodoModule } from './todo/todo.module';
-import { BoardModule } from './board/board.module';
 import { ReflectionModule } from './reflection/reflection.module';
+import { StorageModule } from './storage/storage.module';
+import { TodoModule } from './todo/todo.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -34,6 +35,8 @@ import { ReflectionModule } from './reflection/reflection.module';
     BoardModule,
 
     ReflectionModule,
+
+    StorageModule,
   ],
   controllers: [],
   providers: [AppService],

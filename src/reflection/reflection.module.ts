@@ -1,12 +1,16 @@
 import { Module } from '@nestjs/common';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { BoardEntity } from 'src/board/entities/board.entity';
+import { StorageModule } from 'src/storage/storage.module';
 import { ReflectionEntity } from './entities/reflection.entity';
 import { ReflectionController } from './reflection.controller';
 import { ReflectionService } from './reflection.service';
 
 @Module({
-  imports: [TypegooseModule.forFeature([ReflectionEntity, BoardEntity])],
+  imports: [
+    TypegooseModule.forFeature([ReflectionEntity, BoardEntity]),
+    StorageModule,
+  ],
   controllers: [ReflectionController],
   providers: [ReflectionService],
 })

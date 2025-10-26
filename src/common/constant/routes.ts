@@ -48,5 +48,6 @@ export const Routes = {
     findOneReflection: ':boardId/:id',
     updateOneReflection: ':boardId/:id',
     deleteOneReflection: ':boardId/:id',
+    uploadReflectionImage: 'upload-image',
   },
 } as const;

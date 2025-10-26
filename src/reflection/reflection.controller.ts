@@ -6,9 +6,11 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiImageFile } from 'libraries/decorators/decorators';
 import { Serialize } from 'libraries/serializer/serializer.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Routes } from 'src/common/constant/routes';
@@ -78,5 +80,17 @@ export class ReflectionController {
     @ResourceId('id') id: string,
   ) {
     return this.reflectionService.deleteOneReflection(userId, boardId, id);
+  }
+
+  @ApiImageFile(
+    { fieldName: 'Image', required: true },
+    { limits: { fileSize: 10 * 1024 * 1024, files: 1 } },
+  )
+  @Post(Routes[ControllersEnum.Reflection].uploadReflectionImage)
+  uploadReflectionImage(
+    @UserId() userId: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.reflectionService.uploadReflectionImage(userId, file.buffer);
   }
 }
