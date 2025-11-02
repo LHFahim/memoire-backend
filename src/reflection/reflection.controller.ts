@@ -83,7 +83,7 @@ export class ReflectionController {
   }
 
   @ApiImageFile(
-    { fieldName: 'Image', required: true },
+    { fieldName: 'image', required: true },
     { limits: { fileSize: 10 * 1024 * 1024, files: 1 } },
   )
   @Post(Routes[ControllersEnum.Reflection].uploadReflectionImage)
