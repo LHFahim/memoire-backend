@@ -37,6 +37,13 @@ export class HabitTrackerEntity extends DocumentWithTimeStamps {
   timezone?: string;
 
   @Expose()
+  @IsMongoId()
+  @Type(() => String)
+  @Prop({ required: false, ref: 'habit-sessions' })
+  @ApiProperty({ required: false, type: String })
+  lastHabitSession?: Types.ObjectId;
+
+  @Expose()
   @IsNotEmpty()
   @IsDateString()
   @ApiProperty({ required: true, type: Date })
@@ -48,14 +55,14 @@ export class HabitTrackerEntity extends DocumentWithTimeStamps {
   @IsDateString()
   @ApiProperty({ required: false, type: Date })
   @Prop({ required: false, type: Date, default: null })
-  lastCheckInDate?: Date;
+  lastStartedAt?: Date;
 
   @Expose()
   @IsOptional()
   @IsDateString()
   @ApiProperty({ required: false, type: Date })
   @Prop({ required: false, type: Date, default: null })
-  lastStartedAt?: Date;
+  lastStoppedAt?: Date;
 
   @Expose()
   @IsBoolean()

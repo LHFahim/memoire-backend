@@ -50,4 +50,12 @@ export const Routes = {
     deleteOneReflection: ':boardId/:id',
     uploadReflectionImage: 'upload-image',
   },
+
+  [ControllersEnum.Habit]: {
+    createHabit: '',
+    findAllHabits: '',
+    findOneHabit: ':id',
+    updateOneHabit: ':id',
+    deleteOneHabit: ':id',
+  },
 } as const;
