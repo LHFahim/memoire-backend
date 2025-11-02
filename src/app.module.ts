@@ -11,6 +11,7 @@ import { ReflectionModule } from './reflection/reflection.module';
 import { StorageModule } from './storage/storage.module';
 import { TodoModule } from './todo/todo.module';
 import { UserModule } from './user/user.module';
+import { HabitTrackerModule } from './habit-tracker/habit-tracker.module';
 
 @Module({
   imports: [
@@ -37,6 +38,8 @@ import { UserModule } from './user/user.module';
     ReflectionModule,
 
     StorageModule,
+
+    HabitTrackerModule,
   ],
   controllers: [],
   providers: [AppService],
