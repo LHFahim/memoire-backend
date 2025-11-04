@@ -17,6 +17,10 @@ import { UserId } from 'src/common/decorator/user.decorator';
 import { APIVersions } from 'src/common/enum/api-versions.enum';
 import { ControllersEnum } from 'src/common/enum/controllers.enum';
 import {
+  CreateHabitSessionDto,
+  UpdateHabitSessionDto,
+} from './dto/habit-session.dto';
+import {
   CreateHabitTrackerDto,
   HabitTrackerQueryDto,
   UpdateHabitTrackerDto,
@@ -58,5 +62,52 @@ export class HabitTrackerController {
   @Delete(Routes[ControllersEnum.Habit].deleteOneHabit)
   remove(@UserId() userId: string, @ResourceId() id: string) {
     return this.habitTrackerService.remove(userId, id);
+  }
+
+  @Get(Routes[ControllersEnum.Habit].findAllHabitSessions)
+  findAllHabitSessions(@UserId() userId: string, @ResourceId() id: string) {
+    return this.habitTrackerService.findAllHabitSessions(userId, id);
+  }
+
+  @Get(Routes[ControllersEnum.Habit].findOneHabitSession)
+  findOneHabitSession(
+    @UserId() userId: string,
+    @ResourceId() id: string,
+    @ResourceId('sessionId') sessionId: string,
+  ) {
+    return this.habitTrackerService.findOneHabitSession(userId, id, sessionId);
+  }
+
+  @Post(Routes[ControllersEnum.Habit].createHabitSession)
+  createHabitSession(
+    @UserId() userId: string,
+    @ResourceId() id: string,
+    @Body() body: CreateHabitSessionDto,
+  ) {
+    return this.habitTrackerService.createHabitSession(userId, id, body);
+  }
+
+  @Patch(Routes[ControllersEnum.Habit].updateHabitSession)
+  updateHabitSession(
+    @UserId() userId: string,
+    @ResourceId() id: string,
+    @ResourceId('sessionId') sessionId: string,
+    @Body() body: UpdateHabitSessionDto,
+  ) {
+    return this.habitTrackerService.updateHabitSession(
+      userId,
+      id,
+      sessionId,
+      body,
+    );
+  }
+
+  @Delete(Routes[ControllersEnum.Habit].deleteHabitSession)
+  deleteHabitSession(
+    @UserId() userId: string,
+    @ResourceId() id: string,
+    @ResourceId('sessionId') sessionId: string,
+  ) {
+    return this.habitTrackerService.deleteHabitSession(userId, id, sessionId);
   }
 }

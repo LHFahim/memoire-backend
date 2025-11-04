@@ -1,9 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { SerializeService } from 'libraries/serializer/serialize';
 import { InjectModel } from 'nestjs-typegoose';
 import {
+  CreateHabitSessionDto,
+  UpdateHabitSessionDto,
+} from './dto/habit-session.dto';
+import {
   CreateHabitTrackerDto,
+  HabitSessionDto,
   HabitTrackerDto,
   HabitTrackerPaginatedDto,
   HabitTrackerQueryDto,
@@ -145,5 +150,111 @@ export class HabitTrackerService extends SerializeService<HabitTrackerEntity> {
     await habit.save();
 
     return this.toJSON(habit, HabitTrackerDto);
+  }
+
+  async findAllHabitSessions(userId: string, id: string) {
+    const habitSessions = await this.habitSessionModel.find({
+      habitId: id,
+      userId: userId,
+      isDeleted: false,
+    });
+
+    return this.toJSONs(habitSessions, HabitSessionDto);
+  }
+
+  async findOneHabitSession(userId: string, id: string, sessionId: string) {
+    const habitSession = await this.habitSessionModel.findOne({
+      _id: sessionId,
+      habitId: id,
+      userId: userId,
+      isDeleted: false,
+    });
+
+    if (!habitSession) {
+      throw new Error('Habit session not found');
+    }
+
+    return this.toJSON(habitSession, HabitSessionDto);
+  }
+
+  async createHabitSession(
+    userId: string,
+    id: string,
+    body: CreateHabitSessionDto,
+  ) {
+    const habit = await this.habitTrackerModel.findOne({
+      _id: id,
+      createdBy: userId,
+      isDeleted: false,
+    });
+    if (!habit) throw new NotFoundException('Habit not found');
+
+    const habitSession = await this.habitSessionModel.create({
+      habitId: habit.id,
+      userId: userId,
+      startedAt: new Date(body.startedAt),
+      endedAt: null,
+      durationInHours: null,
+
+      isActive: true,
+      isDeleted: false,
+    });
+
+    return this.toJSON(habitSession, HabitSessionDto);
+  }
+
+  async updateHabitSession(
+    userId: string,
+    id: string,
+    sessionId: string,
+    body: UpdateHabitSessionDto,
+  ) {
+    const habit = await this.habitTrackerModel.findOne({
+      _id: id,
+      createdBy: userId,
+      isDeleted: false,
+    });
+    if (!habit) throw new NotFoundException('Habit not found');
+
+    const habitSession = await this.habitSessionModel.findOne({
+      _id: sessionId,
+      habitId: id,
+      userId: userId,
+      isDeleted: false,
+    });
+    if (!habitSession) throw new NotFoundException('Habit session not found');
+
+    const updatedHabitSession = await this.habitSessionModel.findByIdAndUpdate(
+      sessionId,
+      { $set: body },
+      { new: true },
+    );
+
+    return this.toJSON(updatedHabitSession, HabitSessionDto);
+  }
+
+  async deleteHabitSession(userId: string, id: string, sessionId: string) {
+    const habit = await this.habitTrackerModel.findOne({
+      _id: id,
+      createdBy: userId,
+      isDeleted: false,
+    });
+    if (!habit) throw new NotFoundException('Habit not found');
+
+    const habitSession = await this.habitSessionModel.findOne({
+      _id: sessionId,
+      habitId: id,
+      userId: userId,
+      isDeleted: false,
+    });
+    if (!habitSession) throw new NotFoundException('Habit session not found');
+
+    await this.habitSessionModel.findByIdAndUpdate(
+      sessionId,
+      { isDeleted: true },
+      { new: true },
+    );
+
+    return true;
   }
 }

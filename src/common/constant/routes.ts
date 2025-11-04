@@ -57,5 +57,11 @@ export const Routes = {
     findOneHabit: ':id',
     updateOneHabit: ':id',
     deleteOneHabit: ':id',
+
+    findAllHabitSessions: ':id/habit-sessions',
+    findOneHabitSession: 'habit/:id/session/:sessionId',
+    createHabitSession: 'habit/:id',
+    updateHabitSession: 'habit/:id/session/:sessionId',
+    deleteHabitSession: 'habit/:id/session/:sessionId',
   },
 } as const;
