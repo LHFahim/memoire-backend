@@ -139,19 +139,12 @@ export class ReflectionService extends SerializeService<ReflectionEntity> {
   }
 
   async uploadReflectionImage(userId: string, fileBuffer: Buffer) {
-    // const key = `reflections_${userId}_${Date.now()}.png`;
-    // console.log('🚀 ~ ReflectionService ~ uploadReflectionImage ~ key:', key);
-
     const result = await this.storageService.uploadBuffer(
       userId,
       fileBuffer,
       'image/png',
       'memoire-assets',
       'reflections',
-    );
-    console.log(
-      '🚀 ~ ReflectionService ~ uploadReflectionImage ~ imageUrl:',
-      result,
     );
 
     return { message: 'Image uploaded successfully', url: result.url };

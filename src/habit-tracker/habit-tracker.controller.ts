@@ -18,6 +18,7 @@ import { APIVersions } from 'src/common/enum/api-versions.enum';
 import { ControllersEnum } from 'src/common/enum/controllers.enum';
 import {
   CreateHabitSessionDto,
+  EndHabitSessionDto,
   UpdateHabitSessionDto,
 } from './dto/habit-session.dto';
 import {
@@ -109,5 +110,20 @@ export class HabitTrackerController {
     @ResourceId('sessionId') sessionId: string,
   ) {
     return this.habitTrackerService.deleteHabitSession(userId, id, sessionId);
+  }
+
+  @Patch(Routes[ControllersEnum.Habit].endHabitSession)
+  endHabitSession(
+    @UserId() userId: string,
+    @ResourceId() id: string,
+    @ResourceId('sessionId') sessionId: string,
+    @Body() body: EndHabitSessionDto,
+  ) {
+    return this.habitTrackerService.endHabitSession(
+      userId,
+      id,
+      sessionId,
+      body,
+    );
   }
 }

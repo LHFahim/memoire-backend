@@ -1,4 +1,4 @@
-import { PartialType, PickType } from '@nestjs/swagger';
+import { PickType } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
@@ -8,7 +8,16 @@ export class CreateHabitSessionDto extends PickType(HabitSessionEntity, [
   'startedAt',
 ]) {}
 
-export class UpdateHabitSessionDto extends PartialType(CreateHabitSessionDto) {}
+export class UpdateHabitSessionDto extends PickType(HabitSessionEntity, [
+  'startedAt',
+  'endedAt',
+  'durationInHours',
+  'isActive',
+]) {}
+
+export class EndHabitSessionDto extends PickType(HabitSessionEntity, [
+  'endedAt',
+]) {}
 
 export class HabitSessionDto extends HabitSessionEntity {}
 

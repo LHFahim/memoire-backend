@@ -4,6 +4,7 @@ import { SerializeService } from 'libraries/serializer/serialize';
 import { InjectModel } from 'nestjs-typegoose';
 import {
   CreateHabitSessionDto,
+  EndHabitSessionDto,
   UpdateHabitSessionDto,
 } from './dto/habit-session.dto';
 import {
@@ -256,5 +257,47 @@ export class HabitTrackerService extends SerializeService<HabitTrackerEntity> {
     );
 
     return true;
+  }
+
+  async endHabitSession(
+    userId: string,
+    id: string,
+    sessionId: string,
+    body: EndHabitSessionDto,
+  ) {
+    const habit = await this.habitTrackerModel.findOne({
+      _id: id,
+      createdBy: userId,
+      isDeleted: false,
+    });
+    if (!habit) throw new NotFoundException('Habit not found');
+
+    const habitSession = await this.habitSessionModel.findOne({
+      _id: sessionId,
+      habitId: id,
+      userId: userId,
+      isDeleted: false,
+    });
+    if (!habitSession) throw new NotFoundException('Habit session not found');
+
+    const durationInHours = this.extractHours(
+      new Date(habitSession.startedAt),
+      new Date(body.endedAt),
+    );
+
+    const doc = await this.habitSessionModel.findByIdAndUpdate(
+      sessionId,
+      { $set: { endedAt: body.endedAt, isActive: false, durationInHours } },
+      // { ...body, isActive: false },
+      { new: true },
+    );
+
+    return this.toJSON(doc, HabitSessionDto);
+  }
+
+  extractHours(startedAt: Date, endedAt: Date): number {
+    const diff = endedAt.getTime() - startedAt.getTime();
+    const diffInHours = diff / (1000 * 60 * 60);
+    return Math.round(diffInHours * 100) / 100;
   }
 }
