@@ -168,6 +168,7 @@ export class HabitTrackerService extends SerializeService<HabitTrackerEntity> {
       _id: sessionId,
       habitId: id,
       userId: userId,
+      isActive: true,
       isDeleted: false,
     });
 
@@ -291,6 +292,9 @@ export class HabitTrackerService extends SerializeService<HabitTrackerEntity> {
       // { ...body, isActive: false },
       { new: true },
     );
+
+    habit.lastStoppedAt = new Date(body.endedAt);
+    await habit.save();
 
     return this.toJSON(doc, HabitSessionDto);
   }
