@@ -3,7 +3,7 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { SerializeService } from 'libraries/serializer/serialize';
 import { InjectModel } from 'nestjs-typegoose';
 import { UserEntity } from 'src/user/entities/user.entity';
-import { ProfileDto } from './dto/profile.dto';
+import { ProfileDto, UpdateProfileDto } from './dto/profile.dto';
 
 @Injectable()
 export class ProfileService extends SerializeService<UserEntity> {
@@ -16,6 +16,20 @@ export class ProfileService extends SerializeService<UserEntity> {
 
   async findMyProfile(userId: string) {
     const doc = await this.userModel.findById(userId);
+
+    if (!doc) throw new NotFoundException('User not found');
+
+    return this.toJSON(doc, ProfileDto);
+  }
+
+  async updateMyProfile(userId: string, body: UpdateProfileDto) {
+    const doc = await this.userModel.findByIdAndUpdate(
+      userId,
+      { ...body },
+      {
+        new: true,
+      },
+    );
 
     if (!doc) throw new NotFoundException('User not found');
 

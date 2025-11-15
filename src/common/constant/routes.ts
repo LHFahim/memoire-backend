@@ -24,6 +24,7 @@ export const Routes = {
   },
   [ControllersEnum.Profile]: {
     me: 'me',
+    updateMyProfile: 'update',
   },
 
   [ControllersEnum.Todo]: {

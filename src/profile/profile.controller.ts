@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Serialize } from 'libraries/serializer/serializer.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
@@ -7,6 +7,7 @@ import { UserId } from 'src/common/decorator/user.decorator';
 import { APIVersions } from 'src/common/enum/api-versions.enum';
 import { ControllersEnum } from 'src/common/enum/controllers.enum';
 import { ProfileService } from './profile.service';
+import { UpdateProfileDto } from './dto/profile.dto';
 
 @ApiTags('Profile')
 @Serialize()
@@ -21,5 +22,8 @@ export class ProfileController {
     return this.profileService.findMyProfile(userId);
   }
 
-
+  @Patch(Routes[ControllersEnum.Profile].updateMyProfile)
+  updateMyProfile(@UserId() userId: string, @Body() body: UpdateProfileDto) {
+    return this.profileService.updateMyProfile(userId, body);
+  }
 }
