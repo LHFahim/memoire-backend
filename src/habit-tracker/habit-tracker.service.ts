@@ -150,6 +150,11 @@ export class HabitTrackerService extends SerializeService<HabitTrackerEntity> {
     habit.isDeleted = true;
     await habit.save();
 
+    await this.habitSessionModel.updateMany(
+      { habitId: id, userId: userId, isDeleted: false },
+      { isDeleted: true },
+    );
+
     return this.toJSON(habit, HabitTrackerDto);
   }
 
