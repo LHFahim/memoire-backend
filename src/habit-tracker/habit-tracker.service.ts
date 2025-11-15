@@ -202,6 +202,10 @@ export class HabitTrackerService extends SerializeService<HabitTrackerEntity> {
       isDeleted: false,
     });
 
+    habit.lastHabitSession = habitSession.id;
+    habit.lastStartedAt = new Date(body.startedAt);
+    await habit.save();
+
     return this.toJSON(habitSession, HabitSessionDto);
   }
 
