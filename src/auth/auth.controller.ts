@@ -1,16 +1,26 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Patch,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Serialize } from 'libraries/serializer/serializer.decorator';
 import { Routes } from 'src/common/constant/routes';
+import { UserId } from 'src/common/decorator/user.decorator';
 import { APIVersions } from 'src/common/enum/api-versions.enum';
 import { ControllersEnum } from 'src/common/enum/controllers.enum';
 import { AuthService } from './auth.service';
 import {
   AuthResponseDto,
+  ChangePasswordDto,
   LoginDto,
   RefreshTokenDto,
   RegisterByEmailDto,
 } from './dto/auth.dto';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @ApiTags('Auth')
@@ -42,5 +52,15 @@ export class AuthController {
   @Post(Routes[ControllersEnum.Auth].refreshJwtToken)
   refreshJwtToken(@Body() body: RefreshTokenDto): Promise<AuthResponseDto> {
     return this.authService.refreshJwtToken(body);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Patch(Routes[ControllersEnum.Auth].changePassword)
+  async changePassword(
+    @UserId() userId: string,
+    @Body() body: ChangePasswordDto,
+  ) {
+    return this.authService.changePassword(userId, body);
   }
 }

@@ -15,6 +15,7 @@ export const Routes = {
     login: 'login/email',
     registerByEmail: 'register/email',
     refreshJwtToken: 'refresh-token',
+    changePassword: 'change-password',
   },
   [ControllersEnum.Users]: {
     findAll: '',

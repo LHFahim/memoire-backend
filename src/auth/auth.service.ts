@@ -116,7 +116,9 @@ export class AuthService extends SerializeService<UserEntity> {
     if (user.passwordChangeNeeded) user.passwordChangeNeeded = false;
     await user.save();
 
-    return 'Password changed successful';
+    return {
+      message: 'Password changed successfully',
+    };
   }
 
   async getAuthUser(userId: string) {
